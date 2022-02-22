@@ -173,6 +173,8 @@ class _MailPageState extends State<MailPage> {
                                             child: Text(
                                               'Previous',
                                             ),
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero),
                                             onPressed: () {
                                               ShowCaseWidget.of(context)!
                                                   .prev();
@@ -182,6 +184,8 @@ class _MailPageState extends State<MailPage> {
                                             child: Text(
                                               'Next',
                                             ),
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero),
                                             onPressed: () {
                                               ShowCaseWidget.of(context)!
                                                   .completed(_one);
@@ -191,6 +195,8 @@ class _MailPageState extends State<MailPage> {
                                             child: Text(
                                               'Stop',
                                             ),
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero),
                                             onPressed: () {
                                               ShowCaseWidget.of(context)!
                                                   .dismiss();
