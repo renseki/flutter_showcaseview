@@ -205,7 +205,9 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
     final arrowWidth = 18.0;
     final arrowHeight = 9.0;
 
-    if (widget.container == null) {
+    final customWidget = widget.container;
+
+    if (customWidget == null) {
       return Positioned(
         top: contentY,
         left: _getLeft(),
@@ -322,10 +324,8 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
     } else {
       final left = _getSpace();
 
-      if (left == null) return SizedBox.shrink();
-
       return Positioned(
-        left: left,
+        left: left ?? 0,
         top: contentY - 10,
         child: FractionalTranslation(
           translation: Offset(0.0, contentFractionalOffset as double),
@@ -359,7 +359,13 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
                           contentHeight = size.height;
                         });
                       },
-                      child: widget.container,
+                      child: Visibility(
+                        child: customWidget,
+                        maintainSize: true,
+                        maintainAnimation: true,
+                        maintainState: true,
+                        visible: left != null,
+                      ),
                     ),
                   ),
                 ),
