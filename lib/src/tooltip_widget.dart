@@ -155,7 +155,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
     }
   }
 
-  double _getSpace() {
+  double? _getSpace() {
     final finalContentWidth = contentWidth;
     final finalScreenSize = widget.screenSize;
     final finalPosition = widget.position;
@@ -163,7 +163,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
     if (finalContentWidth == null ||
         finalPosition == null ||
         finalScreenSize == null) {
-      return 0;
+      return null;
     }
 
     var space = finalPosition.getCenter() - (finalContentWidth / 2);
@@ -320,8 +320,12 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
         ),
       );
     } else {
+      final left = _getSpace();
+
+      if (left == null) return SizedBox.shrink();
+
       return Positioned(
-        left: _getSpace(),
+        left: left,
         top: contentY - 10,
         child: FractionalTranslation(
           translation: Offset(0.0, contentFractionalOffset as double),
