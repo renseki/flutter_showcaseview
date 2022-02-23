@@ -25,7 +25,6 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'get_position.dart';
 import 'layout_overlays.dart';
@@ -51,8 +50,6 @@ class Showcase extends StatefulWidget {
   final Color showcaseBackgroundColor;
   final Color textColor;
   final bool showArrow;
-  final double? height;
-  final double? width;
   final Duration animationDuration;
   final VoidCallback? onToolTipClick;
   final VoidCallback? onTargetClick;
@@ -91,9 +88,7 @@ class Showcase extends StatefulWidget {
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
     this.radius,
-  })  : height = null,
-        width = null,
-        container = null,
+  })  : container = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
             "overlay opacity should be >= 0.0 and <= 1.0."),
         assert(
@@ -111,26 +106,24 @@ class Showcase extends StatefulWidget {
     required this.key,
     required this.child,
     required this.container,
-    required this.height,
-    required this.width,
-    this.title,
-    this.description,
     this.shapeBorder,
     this.overlayColor = Colors.black45,
     this.radius,
     this.overlayOpacity = 0.75,
-    this.titleTextStyle,
-    this.descTextStyle,
     this.showcaseBackgroundColor = Colors.white,
-    this.textColor = Colors.black,
     this.onTargetClick,
     this.disposeOnTap,
     this.animationDuration = const Duration(milliseconds: 2000),
     this.disableAnimation = false,
-    this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
-  })  : showArrow = false,
+  })  : title = null,
+        titleTextStyle = null,
+        description = null,
+        descTextStyle = null,
+        textColor = Colors.black,
+        contentPadding = const EdgeInsets.symmetric(vertical: 8),
+        showArrow = false,
         onToolTipClick = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
             "overlay opacity should be >= 0.0 and <= 1.0.");
@@ -201,9 +194,10 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
       _slideAnimationController.forward();
       if (ShowCaseWidget.of(context)!.autoPlay) {
         timer = Timer(
-            Duration(
-                seconds: ShowCaseWidget.of(context)!.autoPlayDelay.inSeconds),
-            _nextIfAny);
+          Duration(
+              seconds: ShowCaseWidget.of(context)!.autoPlayDelay.inSeconds),
+          _nextIfAny,
+        );
       }
     }
   }
@@ -320,8 +314,6 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
                 tooltipColor: widget.showcaseBackgroundColor,
                 textColor: widget.textColor,
                 showArrow: widget.showArrow,
-                contentHeight: widget.height,
-                contentWidth: widget.width,
                 onTooltipTap: _getOnTooltipTap,
                 contentPadding: widget.contentPadding,
               ),

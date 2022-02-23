@@ -40,29 +40,26 @@ class ToolTipWidget extends StatefulWidget {
   final Color? tooltipColor;
   final Color? textColor;
   final bool? showArrow;
-  final double? contentHeight;
-  final double? contentWidth;
   static late bool isArrowUp;
   final VoidCallback? onTooltipTap;
   final EdgeInsets? contentPadding;
 
-  ToolTipWidget(
-      {this.position,
-      this.offset,
-      this.screenSize,
-      this.title,
-      this.description,
-      this.animationOffset,
-      this.titleTextStyle,
-      this.descTextStyle,
-      this.container,
-      this.tooltipColor,
-      this.textColor,
-      this.showArrow,
-      this.contentHeight,
-      this.contentWidth,
-      this.onTooltipTap,
-      this.contentPadding = const EdgeInsets.symmetric(vertical: 8)});
+  ToolTipWidget({
+    this.position,
+    this.offset,
+    this.screenSize,
+    this.title,
+    this.description,
+    this.animationOffset,
+    this.titleTextStyle,
+    this.descTextStyle,
+    this.container,
+    this.tooltipColor,
+    this.textColor,
+    this.showArrow,
+    this.onTooltipTap,
+    this.contentPadding = const EdgeInsets.symmetric(vertical: 8),
+  });
 
   @override
   _ToolTipWidgetState createState() => _ToolTipWidgetState();
@@ -70,10 +67,12 @@ class ToolTipWidget extends StatefulWidget {
 
 class _ToolTipWidgetState extends State<ToolTipWidget> {
   Offset? position;
+  double? contentHeight;
+  double? contentWidth;
 
   bool isCloseToTopOrBottom(Offset position) {
     var height = 120.0;
-    height = widget.contentHeight ?? height;
+    height = contentHeight ?? height;
     return (widget.screenSize!.height - position.dy) <= height;
   }
 
@@ -157,10 +156,20 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
   }
 
   double _getSpace() {
-    var space = widget.position!.getCenter() - (widget.contentWidth! / 2);
-    if (space + widget.contentWidth! > widget.screenSize!.width) {
-      space = widget.screenSize!.width - widget.contentWidth! - 8;
-    } else if (space < (widget.contentWidth! / 2)) {
+    final finalContentWidth = contentWidth;
+    final finalScreenSize = widget.screenSize;
+    final finalPosition = widget.position;
+
+    if (finalContentWidth == null ||
+        finalPosition == null ||
+        finalScreenSize == null) {
+      return 0;
+    }
+
+    var space = finalPosition.getCenter() - (finalContentWidth / 2);
+    if (space + finalContentWidth > finalScreenSize.width) {
+      space = finalScreenSize.width - finalContentWidth - 8;
+    } else if (space < (finalContentWidth / 2)) {
       space = 16;
     }
     return space;
@@ -311,48 +320,49 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
         ),
       );
     } else {
-      return Stack(
-        children: <Widget>[
-          Positioned(
-            left: _getSpace(),
-            top: contentY - 10,
-            child: FractionalTranslation(
-              translation: Offset(0.0, contentFractionalOffset as double),
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0.0, contentFractionalOffset / 10),
-                  end: !widget.showArrow! && !ToolTipWidget.isArrowUp
-                      ? Offset(0.0, 0.0)
-                      : Offset(0.0, 0.100),
-                ).animate(widget.animationOffset!),
-                child: Material(
+      return Positioned(
+        left: _getSpace(),
+        top: contentY - 10,
+        child: FractionalTranslation(
+          translation: Offset(0.0, contentFractionalOffset as double),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: Offset(0.0, contentFractionalOffset / 10),
+              end: !widget.showArrow! && !ToolTipWidget.isArrowUp
+                  ? Offset(0.0, 0.0)
+                  : Offset(0.0, 0.100),
+            ).animate(widget.animationOffset!),
+            child: Material(
+              color: Colors.transparent,
+              child: GestureDetector(
+                onTap: widget.onTooltipTap,
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: paddingTop,
+                  ),
                   color: Colors.transparent,
-                  child: GestureDetector(
-                    onTap: widget.onTooltipTap,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        top: paddingTop,
-                      ),
-                      color: Colors.transparent,
-                      child: Center(
-                        child: MeasureSize(
-                            onSizeChange: (size) {
-                              setState(() {
-                                var tempPos = position;
-                                tempPos = Offset(
-                                    position!.dx, position!.dy + size!.height);
-                                position = tempPos;
-                              });
-                            },
-                            child: widget.container),
-                      ),
+                  child: Center(
+                    child: MeasureSize(
+                      onSizeChange: (size) {
+                        setState(() {
+                          final finalPosition = position;
+                          if (finalPosition == null || size == null) return;
+                          position = Offset(
+                            finalPosition.dx,
+                            finalPosition.dy + size.height,
+                          );
+                          contentWidth = size.width;
+                          contentHeight = size.height;
+                        });
+                      },
+                      child: widget.container,
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ],
+        ),
       );
     }
   }

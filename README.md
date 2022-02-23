@@ -19,7 +19,7 @@ A Flutter package allows you to Showcase/Highlight your widgets step by step.
 
     *Get the latest version in the 'Installing' tab on [pub.dev](https://pub.dev/packages/showcaseview)*
 
-```dart
+```yaml
 dependencies:
     showcaseview: <latest-version>
 ```
@@ -81,8 +81,6 @@ Showcase(
 ```dart
 Showcase.withWidget(
   key: _three,
-  cHeight: 80,
-  cWidth: 140,
   shapeBorder: CircleBorder(),
   container: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +146,7 @@ We have updated license of flutter_showcaseview from BSD 2-Clause "Simplified" t
 ```text
 MIT License
 
-Copyright (c) 2021 Simform Solutions
+Copyright (c) 2022 Renseki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
