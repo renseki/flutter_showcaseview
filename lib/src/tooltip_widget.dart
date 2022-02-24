@@ -168,8 +168,8 @@ class _ToolTipWidgetState extends State<ToolTipWidget> {
 
     var space = finalPosition.getCenter() - (finalContentWidth / 2);
     if (space + finalContentWidth > finalScreenSize.width) {
-      space = finalScreenSize.width - finalContentWidth - 8;
-    } else if (space < (finalContentWidth / 2)) {
+      space = finalScreenSize.width - finalContentWidth - 16;
+    } else if (space < 16) {
       space = 16;
     }
     return space;
