@@ -56,6 +56,7 @@ class Showcase extends StatefulWidget {
   final bool? disposeOnTap;
   final bool disableAnimation;
   final EdgeInsets overlayPadding;
+  final OverlayEntry? topOverlayEntry;
 
   /// Defines blur value.
   /// This will blur the background while displaying showcase.
@@ -88,6 +89,7 @@ class Showcase extends StatefulWidget {
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
     this.radius,
+    this.topOverlayEntry,
   })  : container = null,
         assert(overlayOpacity >= 0.0 && overlayOpacity <= 1.0,
             "overlay opacity should be >= 0.0 and <= 1.0."),
@@ -117,6 +119,7 @@ class Showcase extends StatefulWidget {
     this.disableAnimation = false,
     this.overlayPadding = EdgeInsets.zero,
     this.blurValue,
+    this.topOverlayEntry,
   })  : title = null,
         titleTextStyle = null,
         description = null,
@@ -216,6 +219,7 @@ class _ShowcaseState extends State<Showcase> with TickerProviderStateMixin {
         return buildOverlayOnTarget(offset, rectBound.size, rectBound, size);
       },
       showOverlay: true,
+      topOverlayEntry: widget.topOverlayEntry,
       child: widget.child,
     );
   }

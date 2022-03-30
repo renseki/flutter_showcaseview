@@ -41,6 +41,7 @@ import 'showcase_widget.dart';
 ///
 class AnchoredOverlay extends StatelessWidget {
   final bool showOverlay;
+  final OverlayEntry? topOverlayEntry;
   final Widget Function(BuildContext, Rect anchorBounds, Offset anchor)?
       overlayBuilder;
   final Widget? child;
@@ -48,6 +49,7 @@ class AnchoredOverlay extends StatelessWidget {
   AnchoredOverlay({
     Key? key,
     this.showOverlay = false,
+    this.topOverlayEntry,
     this.overlayBuilder,
     this.child,
   }) : super(key: key);
@@ -58,6 +60,7 @@ class AnchoredOverlay extends StatelessWidget {
       builder: (context, constraints) {
         return OverlayBuilder(
           showOverlay: showOverlay,
+          topOverlayEntry: topOverlayEntry,
           overlayBuilder: (overlayContext) {
             // To calculate the "anchor" point we grab the render box of
             // our parent Container and then we find the center of that box.
@@ -102,12 +105,14 @@ class AnchoredOverlay extends StatelessWidget {
 /// a better approach is found then feel free to use it.
 class OverlayBuilder extends StatefulWidget {
   final bool showOverlay;
+  final OverlayEntry? topOverlayEntry;
   final Widget Function(BuildContext)? overlayBuilder;
   final Widget? child;
 
   OverlayBuilder({
     Key? key,
     this.showOverlay = false,
+    this.topOverlayEntry,
     this.overlayBuilder,
     this.child,
   }) : super(key: key);
@@ -169,10 +174,16 @@ class _OverlayBuilderState extends State<OverlayBuilder> {
   void addToOverlay(OverlayEntry overlayEntry) async {
     if (ShowCaseWidget.of(context)?.context != null &&
         Overlay.of(ShowCaseWidget.of(context)!.context) != null) {
-      Overlay.of(ShowCaseWidget.of(context)!.context)!.insert(overlayEntry);
+      Overlay.of(ShowCaseWidget.of(context)!.context)!.insert(
+        overlayEntry,
+        below: widget.topOverlayEntry,
+      );
     } else {
       if (Overlay.of(context) != null) {
-        Overlay.of(context)!.insert(overlayEntry);
+        Overlay.of(context)!.insert(
+          overlayEntry,
+          below: widget.topOverlayEntry,
+        );
       }
     }
   }
