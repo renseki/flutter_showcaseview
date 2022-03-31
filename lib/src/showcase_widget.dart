@@ -120,6 +120,16 @@ class ShowCaseWidgetState extends State<ShowCaseWidget> {
     }
   }
 
+  void dismissThenFinish() {
+    if (mounted) {
+      setState(_cleanupAfterSteps);
+    }
+
+    if (widget.onFinish != null) {
+      widget.onFinish!();
+    }
+  }
+
   void _onStart() {
     if (activeWidgetId! < ids!.length) {
       widget.onStart?.call(activeWidgetId, ids![activeWidgetId!]);
