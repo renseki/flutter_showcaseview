@@ -22,8 +22,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'showcase_widget.dart';
-
 /// Displays an overlay Widget anchored directly above the center of this
 /// [AnchoredOverlay].
 ///
@@ -172,34 +170,10 @@ class _OverlayBuilderState extends State<OverlayBuilder> {
   }
 
   void addToOverlay(OverlayEntry overlayEntry) async {
-    if (ShowCaseWidget.of(context)?.context != null &&
-        Overlay.of(ShowCaseWidget.of(context)!.context) != null) {
-      try {
-        Overlay.of(ShowCaseWidget.of(context)!.context)!.insert(
-          overlayEntry,
-          below: widget.topOverlayEntry,
-        );
-      } catch (e) {
-        //ignore
-        Overlay.of(ShowCaseWidget.of(context)!.context)!.insert(
-          overlayEntry,
-        );
-      }
-    } else {
-      if (Overlay.of(context) != null) {
-        try {
-          Overlay.of(context)!.insert(
-            overlayEntry,
-            below: widget.topOverlayEntry,
-          );
-        } catch (e) {
-          //ignore
-          Overlay.of(context)!.insert(
-            overlayEntry,
-          );
-        }
-      }
-    }
+    Overlay.of(context)?.insert(
+      overlayEntry,
+      below: widget.topOverlayEntry,
+    );
   }
 
   void hideOverlay() {
